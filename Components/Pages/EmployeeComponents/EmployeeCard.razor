@@ -1,0 +1,86 @@
+﻿<div class="employee-card">
+    <!-- Header -->
+    <div class="card-header">
+        <h3 class="card-title">Employee Information</h3>
+
+        <div class="header-controls">
+            <div class="control-group">
+                <label class="control-label">Employee ID</label>
+
+                <select class="form-select" @bind="SelectedEmployeeId">
+                    <option value="">Select</option>
+                    @foreach (var id in EmployeeIds)
+                    {
+                        <option value="@id">@id</option>
+                    }
+                </select>
+
+                <button class="btn-primary" @onclick="HandleView">View</button>
+            </div>
+
+            <div class="icon-buttons">
+                <button class="icon-btn-sm" type="button">−</button>
+                <button class="icon-btn-sm" type="button">□</button>
+            </div>
+        </div>
+
+        <button class="btn-add" @onclick="HandleAddNew">
+            <span class="add-icon">⊕</span>
+            Add a new employee
+        </button>
+    </div>
+
+    <!-- Body -->
+    @if (Employee is not null)
+    {
+        <EmployeeDetailsDisplay Employee="Employee" />
+
+        <EmployeeDetailsTable Employee="Employee"
+                              OnDelete="HandleDelete" />
+    }
+
+    <!-- Footer -->
+    <div class="card-footer">
+        <a href="/employees/all" class="link-view-all">View All</a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<string> EmployeeIds { get; set; } = new();
+
+    [Parameter]
+    public EmployeeModel? Employee { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnViewEmployee { get; set; }
+
+    [Parameter]
+    public EventCallback OnAddEmployee { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnDeleteEmployee { get; set; }
+
+    private string SelectedEmployeeId { get; set; } = string.Empty;
+
+    private async Task HandleView()
+    {
+        if (!string.IsNullOrWhiteSpace(SelectedEmployeeId))
+        {
+            await OnViewEmployee.InvokeAsync(SelectedEmployeeId);
+        }
+    }
+
+    private async Task HandleAddNew()
+    {
+        await OnAddEmployee.InvokeAsync();
+    }
+
+    private async Task HandleDelete()
+    {
+        if (Employee != null)
+        {
+            await OnDeleteEmployee.InvokeAsync(Employee.EmployeeId);
+        }
+    }
+}

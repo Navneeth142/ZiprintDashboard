@@ -1,0 +1,54 @@
+﻿@page "/employees/all"
+@using BlazorAssignment.Models
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject BlazorAssignment.Services.EmployeeService EmployeeService
+@inject NavigationManager Navigation
+
+<div class="employee-card">
+    <div class="card-header">
+        <h3 class="card-title"><center>All Employees</center></h3>
+
+        <button class="btn-back" @onclick="GoBack">
+            ← Back
+        </button>
+    </div>
+
+    <QuickGrid TGridItem="EmployeeModel"
+               Items="employees"
+               Class="quickgrid-table">
+
+
+        <PropertyColumn Property="@(e => e.EmployeeId)" Title="Employee ID" Sortable="true" />
+        <PropertyColumn Property="@(e => e.EmployeeName)" Title="Name" Sortable="true" />
+        <PropertyColumn Property="@(e => e.EmployeeRole)" Title="Role" Sortable="true" />
+        <PropertyColumn Property="@(e => e.PhoneNumber)" Title="Phone" />
+        <PropertyColumn Property="@(e => e.Email)" Title="Email" />
+        <PropertyColumn Property="@(e => e.PlantId)" Title="Plant ID" Sortable="true" />
+        <PropertyColumn Property="@(e => e.DateOfJoining)" Title="DOJ" Sortable="true" />
+
+        <TemplateColumn Title="Status">
+            <span class="status-badge @(context.IsActive ? "active" : "inactive")">
+                @(context.IsActive ? "ACTIVE" : "INACTIVE")
+            </span>
+        </TemplateColumn>
+    </QuickGrid>
+
+    <div class="grid-footer">
+        <Paginator State="pagination" />
+    </div>
+</div>
+
+@code {
+    private IQueryable<EmployeeModel> employees = default!;
+    private PaginationState pagination = new() { ItemsPerPage = 5 };
+
+    protected override void OnInitialized()
+    {
+        employees = EmployeeService.GetAllEmployees().AsQueryable();
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/employee-information");
+    }
+}

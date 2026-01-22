@@ -1,0 +1,84 @@
+﻿@page "/dashboard"
+@using BlazorAssignment.Services
+@using BlazorAssignment.Helper
+@inject AndonRealtimeService Service
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle><center>Andon Dashboard</center></PageTitle>
+
+<!-- TOP GREEN HEADER -->
+<AndonHeader Date="state.DateTime" />
+
+<!-- FULL GREEN PAGE -->
+<div class="andon-page">
+
+    <!-- WHITE DASHBOARD CARD -->
+    <div class="andon-container">
+
+        <!-- LEFT : PART STATUS TABLE -->
+        <PartStatusTable Parts="state.Parts" />
+
+        <!-- RIGHT : STACKED BAR CHARTS -->
+        <div class="charts">
+            <ShiftChartJs @ref="bChart"
+                          PartNo="B1223450"
+                          CanvasId="chart-b"
+                          Labels="@bLabels"
+                          Values="@BValues" />
+
+            <ShiftChartJs @ref="cChart"
+                          PartNo="C1223450"
+                          CanvasId="chart-c"
+                          Labels="@cLabels"
+                          Values="@CValues" />
+
+            <ShiftChartJs @ref="dChart"
+                          PartNo="D1223450"
+                          CanvasId="chart-d"
+                          Labels="@dLabels"
+                          Values="@DValues" />
+        </div>
+
+        <!-- KPI ROW (BELOW GRID, CENTERED) -->
+        <div class="kpi-container">
+            <KpiFooter />
+        </div>
+
+        <!-- FOOTER LOGOS (BOTTOM, OUTSIDE GRID) -->
+        <div class="dashboard-footer">
+            <img src="/images/Amit_image.png" class="logo-amit" />
+            <img src="/images/AceMicromatic_image.png" class="logo-ace" />
+        </div>
+
+
+
+    </div>
+</div>
+
+@code {
+
+    private BlazorAssignment.Models.AndonState state = new();
+
+    private ShiftChartJs? bChart;
+    private ShiftChartJs? cChart;
+    private ShiftChartJs? dChart;
+
+    private readonly string[] bLabels = { "S-05", "S-06" };
+    private readonly string[] cLabels = { "S-07" };
+    private readonly string[] dLabels = { "S-08" };
+
+    private int[] BValues =>
+        state.ShiftCounts.TryGetValue("B1223450", out var v) ? v : Array.Empty<int>();
+
+    private int[] CValues =>
+        state.ShiftCounts.TryGetValue("C1223450", out var v) ? v : Array.Empty<int>();
+
+    private int[] DValues =>
+        state.ShiftCounts.TryGetValue("D1223450", out var v) ? v : Array.Empty<int>();
+
+    protected override void OnInitialized()
+    {
+        // ONE-TIME LOAD (NO TIMER, NO AUTO REFRESH)
+        state = Service.GetState();
+    }
+}

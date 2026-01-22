@@ -1,0 +1,48 @@
+﻿@using BlazorAssignment.Models
+
+<div class="part-status-card">
+
+    <!-- Header -->
+    <div class="part-status-header">
+        <div>Part Number</div>
+        <div>Count / Target</div>
+        <div>% Completion</div>
+    </div>
+
+    <!-- Rows -->
+    @foreach (var p in Parts
+        .Select(p => new
+        {
+            Part = p,
+            Percent = Math.Min(100, Math.Round((double)p.Count / p.Target * 100, 1))
+        })
+        .OrderByDescending(x => x.Percent)
+        .Select((x, index) => new { x.Part, x.Percent, Index = index }))
+    {
+        bool isTop = p.Index < 3;
+
+        <div class="part-row @(isTop ? "active" : "")">
+            <div class="part-no">@p.Part.PartNo</div>
+
+            <div class="count">
+                @p.Part.Count/@p.Part.Target
+            </div>
+
+            <div class="progress-cell">
+                <span class="percent">@p.Percent%</span>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"
+                         style="width:@p.Percent%">
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public List<PartStatus> Parts { get; set; } = [];
+}

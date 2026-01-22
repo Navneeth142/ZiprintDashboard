@@ -1,0 +1,81 @@
+﻿@page "/employee-information"
+@using BlazorAssignment.Components.Layout
+@inject EmployeeService EmployeeService
+@inject NavigationManager Navigation
+
+<div class="app-container">
+    <div class="main-content">
+        <EmployeeInfoHeader Title="Employee Information"
+                OnNotificationClick="HandleNotification"
+                OnSearchClick="HandleSearch"
+                OnSettingsClick="HandleSettings" />
+
+        <div class="content-wrapper">
+            <EmployeeCard EmployeeIds="employeeIds"
+                          Employee="currentEmployee"
+                          OnViewEmployee="ViewEmployee"
+                          OnAddEmployee="AddNewEmployee"
+                          OnDeleteEmployee="DeleteEmployee" />
+        </div>
+
+        <div class="page-logos">
+            <img src="images/Amit_image.png" class="footer-logo2" />
+            <img src="images/AceMicromatic_image.png" class="footer-logo2" />
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private List<string> employeeIds = new();
+    private EmployeeModel? currentEmployee;
+
+    protected override void OnInitialized()
+    {
+        employeeIds = EmployeeService.GetEmployeeIds();
+
+        // Load first employee by default
+        if (employeeIds.Any())
+        {
+            currentEmployee = EmployeeService.GetEmployeeById(employeeIds.First());
+        }
+    }
+
+    private void ViewEmployee(string employeeId)
+    {
+        currentEmployee = EmployeeService.GetEmployeeById(employeeId);
+    }
+
+    private void AddNewEmployee()
+    {
+        // Navigate to add employee page or show modal
+        Navigation.NavigateTo("/employee/add");
+        Console.WriteLine("Add new employee clicked");
+    }
+
+    private void DeleteEmployee(string employeeId)
+    {
+        EmployeeService.DeleteEmployee(employeeId);
+
+        employeeIds = EmployeeService.GetEmployeeIds();
+
+        currentEmployee = employeeIds.Any()
+            ? EmployeeService.GetEmployeeById(employeeIds.First())
+            : null;
+    }
+
+    private void HandleNotification()
+    {
+        Console.WriteLine("Notification clicked");
+    }
+
+    private void HandleSearch()
+    {
+        Console.WriteLine("Search clicked");
+    }
+
+    private void HandleSettings()
+    {
+        Console.WriteLine("Settings clicked");
+    }
+}

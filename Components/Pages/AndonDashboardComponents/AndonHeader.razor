@@ -1,0 +1,39 @@
+﻿<div class="andon-header">
+
+    <!-- LEFT GROUP: Logo + Title SIDE BY SIDE -->
+    <div class="andon-header-left">
+        <img src="images/Chamundi_image.png"
+             class="andon-logo"
+             alt="Chamundi Logo" />
+
+        <div class="andon-title">
+            <div class="andon-main">ANDON</div>
+            <div class="andon-sub">Dashboard</div>
+        </div>
+    </div>
+
+    <!-- RIGHT GROUP: META -->
+    <div class="meta">
+        <div>
+            <label>Date</label>
+            <span>@Date.ToString("dd-MM-yyyy")</span>
+        </div>
+        <div>
+            <label>Time</label>
+            <span>@Date.ToString("hh:mm tt")</span>
+        </div>
+        <div>
+            <label>Plant</label>
+            <span>CDC-01</span>
+        </div>
+        <div>
+            <label>Shift</label>
+            <span>S-01</span>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    [Parameter] public DateTime Date { get; set; }
+}

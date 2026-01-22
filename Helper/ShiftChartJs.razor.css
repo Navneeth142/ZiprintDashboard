@@ -1,0 +1,31 @@
+﻿.chart-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    height: 280px; /* ✅ FIXED HEIGHT */
+    display: flex;
+    flex-direction: column;
+}
+
+    .chart-card h4 {
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        color: #666;
+        font-weight: 600;
+    }
+
+    .chart-card h3 {
+        margin: 0 0 16px 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #0d6d4f;
+    }
+
+/* ✅ CRITICAL: Fixed canvas height */
+canvas {
+    flex: 1;
+    height: 200px !important; /* FIXED */
+    max-height: 200px !important;
+    width: 100% !important;
+}

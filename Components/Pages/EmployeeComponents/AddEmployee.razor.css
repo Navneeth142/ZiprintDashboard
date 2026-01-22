@@ -1,0 +1,100 @@
+﻿/* ---------- CARD ---------- */
+.employee-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 24px;
+}
+
+/* ---------- HEADER ---------- */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0d6d4f;
+}
+
+/* Back button */
+.btn-back {
+    background: transparent;
+    border: none;
+    color: #0d6d4f;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* ---------- FORM ---------- */
+.employee-form {
+    margin-top: 24px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-bottom: 6px;
+}
+
+/* Input style (underline like details page) */
+.form-input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #cde6df;
+    padding: 6px 4px;
+    font-size: 14px;
+    outline: none;
+    background: transparent;
+}
+
+    .form-input:focus {
+        border-bottom-color: #0d6d4f;
+    }
+
+/* ---------- VALIDATION ---------- */
+.validation-message {
+    color: #d9534f;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* ---------- ACTIONS ---------- */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.btn-primary {
+    background: #0d6d4f;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+    .btn-primary:hover {
+        background: #0b5c42;
+    }
+
+.btn-cancel {
+    background: #f1f1f1;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}

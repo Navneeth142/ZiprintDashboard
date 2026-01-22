@@ -1,0 +1,40 @@
+﻿<div class="employee-details">
+    <div class="detail-row">
+        <div class="detail-group">
+            <label class="detail-label">Employee ID</label>
+            <div class="detail-value">@Employee.EmployeeId</div>
+        </div>
+
+        <div class="detail-group">
+            <label class="detail-label">Employee Name</label>
+            <div class="detail-value">@Employee.EmployeeName</div>
+        </div>
+
+        <div class="detail-group">
+            <label class="detail-label">Employee Role</label>
+            <div class="detail-value">@Employee.EmployeeRole</div>
+        </div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-group">
+            <label class="detail-label">Phone Number</label>
+            <div class="detail-value">@Employee.PhoneNumber</div>
+        </div>
+
+        <div class="detail-group">
+            <label class="detail-label">Email</label>
+            <div class="detail-value email">@Employee.Email</div>
+        </div>
+
+        <div class="detail-group">
+            <label class="detail-label">Plant ID</label>
+            <div class="detail-value">@Employee.PlantId</div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public EmployeeModel Employee { get; set; } = null!;
+}

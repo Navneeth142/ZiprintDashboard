@@ -1,0 +1,121 @@
+﻿@page "/employee/add"
+@inject NavigationManager Navigation
+@inject EmployeeService EmployeeService
+
+<EditForm Model="employee" OnValidSubmit="SaveEmployee">
+    <DataAnnotationsValidator />
+
+    <div class="employee-card">
+        <!-- Header -->
+        <div class="card-header">
+            <h3 class="card-title">Add Employee</h3>
+
+            <button type="button" class="btn-back" @onclick="GoBack">
+                ← Back
+            </button>
+
+        </div>
+
+        <!-- Form -->
+        <div class="employee-form">
+            <!-- Row 1 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Employee ID</label>
+                    <InputText class="form-input" @bind-Value="employee.EmployeeId" />
+                    <ValidationMessage For="@(() => employee.EmployeeId)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Employee Name</label>
+                    <InputText class="form-input" @bind-Value="employee.EmployeeName" />
+                    <ValidationMessage For="@(() => employee.EmployeeName)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Employee Role</label>
+                    <InputText class="form-input" @bind-Value="employee.EmployeeRole" />
+                    <ValidationMessage For="@(() => employee.EmployeeRole)" />
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <InputText class="form-input" @bind-Value="employee.PhoneNumber" />
+                    <ValidationMessage For="@(() => employee.PhoneNumber)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <InputText class="form-input" type="email" @bind-Value="employee.Email" />
+                    <ValidationMessage For="@(() => employee.Email)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Plant ID</label>
+                    <InputText class="form-input" @bind-Value="employee.PlantId" />
+                    <ValidationMessage For="@(() => employee.PlantId)" />
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date of Joining</label>
+                    <InputDate class="form-input" @bind-Value="employee.DateOfJoining" />
+                    <ValidationMessage For="@(() => employee.DateOfJoining)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <InputText class="form-input" type="text" @bind-Value="employee.Password" />
+                    <ValidationMessage For="@(() => employee.Password)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Status</label>
+                    <InputSelect class="form-input" @bind-Value="employee.IsActive">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </InputSelect>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" @onclick="GoBack">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn-primary">
+                    Save Employee
+                </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private EmployeeModel employee = new();
+
+    private void SaveEmployee()
+    {
+        var success = EmployeeService.AddEmployee(employee);
+
+        if (!success)
+        {
+            // simple duplicate handling
+            Console.WriteLine("Employee ID already exists");
+            return;
+        }
+
+        Navigation.NavigateTo("/employee-information");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/employee-information");
+    }
+}

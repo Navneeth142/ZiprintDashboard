@@ -1,0 +1,46 @@
+﻿.employee-details {
+    padding: 30px;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 25px;
+}
+
+    .detail-row:last-child {
+        margin-bottom: 0;
+    }
+
+.detail-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.detail-label {
+    font-size: 13px;
+    color: #0d6d4f;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.detail-value {
+    font-size: 30px;
+    color: #0d6d4f;
+    font-weight: 200;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+    .detail-value.email {
+        font-size: 14px;
+    }
+
+@media (max-width: 768px) {
+    .detail-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}

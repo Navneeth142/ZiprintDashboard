@@ -1,0 +1,58 @@
+﻿.header {
+    background-color: white;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.company-logo {
+    margin-right: 30px;
+}
+
+.logo-box {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #0d6d4f;
+    padding: 5px 10px;
+    border-radius: 2px;
+}
+
+.logo-text-green {
+    color: #0d6d4f;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.logo-text-red {
+    color: #c41e3a;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.page-title {
+    flex: 1;
+    color: #0d6d4f;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: opacity 0.2s;
+}
+
+    .icon-btn:hover {
+        opacity: 0.7;
+    }

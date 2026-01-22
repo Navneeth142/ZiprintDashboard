@@ -1,0 +1,64 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <h1 class="logo">ZIPRINT</h1>
+        <p class="subtitle">Packing Module Application</p>
+    </div>
+
+    
+
+    <NavLink href="/dashboard"
+             class="nav-item line-item"
+             ActiveClass="active"
+             Match="NavLinkMatch.All">
+        <span class="icon">⊙</span>
+        <span>Packing Dashboard</span>
+    </NavLink>
+
+    <NavLink href="/plant-station" class="nav-item" ActiveClass="active">
+        <span class="icon">▤</span>
+        <span>Plant and Station Details</span>
+    </NavLink>
+
+    <NavLink href="/customer-info" class="nav-item" ActiveClass="active">
+        <span class="icon">ⓘ</span>
+        <span>Customer Information</span>
+    </NavLink>
+
+    <NavLink href="/part-info" class="nav-item" ActiveClass="active">
+        <span class="icon">⚙</span>
+        <span>Part Information</span>
+    </NavLink>
+
+    <NavLink href="/employee-information"
+             class="nav-item"
+             ActiveClass="active"
+             Match="NavLinkMatch.Prefix">
+        <span class="icon">👤</span>
+        <span>Employee Information</span>
+    </NavLink>
+
+    <NavLink href="/qr-code" class="nav-item" ActiveClass="active">
+        <span class="icon">▦</span>
+        <span>QR Code Information</span>
+        <span class="dropdown-arrow">∨</span>
+    </NavLink>
+
+    <NavLink href="/part-qr-mapping" class="nav-item" ActiveClass="active">
+        <span class="icon">▥</span>
+        <span>Part and QR Mapping</span>
+    </NavLink>
+
+    <NavLink href="/shift-details" class="nav-item" ActiveClass="active">
+        <span class="icon">📅</span>
+        <span>Shift Details</span>
+    </NavLink>
+
+    <div class="sidebar-footer">
+        <NavLink href="/signout" class="nav-item">
+            <span class="icon">⏻</span>
+            <span>Sign Out</span>
+        </NavLink>
+    </div>
+</nav>

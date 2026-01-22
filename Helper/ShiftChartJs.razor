@@ -1,0 +1,60 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JS
+@implements IDisposable
+
+<div class="chart-card">
+    <h4>Shift Part Count</h4>
+    <h3>@PartNo</h3>
+    <canvas id="@CanvasId" height="220"></canvas>
+</div>
+
+@code {
+    [Parameter] public string PartNo { get; set; } = "";
+    [Parameter] public string CanvasId { get; set; } = "";
+    [Parameter] public string[] Labels { get; set; } = [];
+    [Parameter] public int[] Values { get; set; } = [];
+
+    private bool chartReady = false;
+    private bool disposed = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !string.IsNullOrEmpty(CanvasId))
+        {
+            try
+            {
+                // 🔥 Test if JS is ready
+                await JS.InvokeVoidAsync("eval", "if(typeof andonCharts === 'undefined') throw 'JS not loaded'");
+
+                await JS.InvokeVoidAsync("andonCharts.create", CanvasId, Labels, Values);
+                chartReady = true;
+            }
+            catch (JSException ex)
+            {
+                Console.WriteLine($"Chart init failed: {ex.Message}");
+                // Retry after 500ms
+                await Task.Delay(500);
+                await JS.InvokeVoidAsync("andonCharts.create", CanvasId, Labels, Values);
+                chartReady = true;
+            }
+        }
+    }
+
+    public async Task Update(int[] values)
+    {
+        if (!chartReady || disposed || string.IsNullOrEmpty(CanvasId))
+            return;
+
+        try
+        {
+            await JS.InvokeVoidAsync("andonCharts.update", CanvasId, values);
+        }
+        catch (JSException)
+        {
+            // Silent fail - chart might recreate
+            chartReady = false;
+        }
+    }
+
+    public void Dispose() => disposed = true;
+}

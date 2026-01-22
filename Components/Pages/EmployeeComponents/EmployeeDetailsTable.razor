@@ -1,0 +1,42 @@
+﻿<div class="details-table">
+    <div class="table-header">
+        <div class="table-cell">Date of Joining</div>
+        <div class="table-cell">Password</div>
+        <div class="table-cell">Status</div>
+        <div class="table-cell">Actions</div>
+    </div>
+
+    <div class="table-row">
+        <div class="table-cell">@Employee.DateOfJoining</div>
+
+        <div class="table-cell">@Employee.Password</div>
+
+        <div class="table-cell">
+            <span class="status-badge @(Employee.IsActive ? "active" : "inactive")">
+                @(Employee.IsActive ? "ACTIVE" : "INACTIVE")
+            </span>
+        </div>
+
+        <div class="table-cell">
+            <button class="btn-delete"
+                    type="button"
+                    title="Delete Employee"
+                    @onclick="HandleDelete">
+                🗑
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public EmployeeModel Employee { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback OnDelete { get; set; }
+
+    private async Task HandleDelete()
+    {
+        await OnDelete.InvokeAsync();
+    }
+}

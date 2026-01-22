@@ -1,0 +1,71 @@
+﻿/* ---------- QUICKGRID ---------- */
+.quickgrid-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+    /* Header */
+    .quickgrid-table thead th {
+        background: #eef3f2;
+        padding: 12px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Rows */
+    .quickgrid-table tbody td {
+        padding: 12px;
+        border-bottom: 1px solid #e6e6e6;
+        font-size: 14px;
+    }
+
+    /* Hover */
+    .quickgrid-table tbody tr:hover {
+        background: #f7faf9;
+    }
+
+/* Status badge */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+    .status-badge.active {
+        background: #4caf50;
+        color: white;
+    }
+
+    .status-badge.inactive {
+        background: #e57373;
+        color: white;
+    }
+
+/* Pagination */
+.grid-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.paginator button {
+    border: none;
+    background: #f1f1f1;
+    padding: 6px 12px;
+    margin: 0 4px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .paginator button:hover {
+        background: #dfe9e6;
+    }
+
+    .paginator button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
