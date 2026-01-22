@@ -270,9 +270,11 @@
 }
 
 .part-row.active .progress-fill {
-    background: rgba(255,255,255,0.95);
-    z-index: 1;
+    height: 100%;
+    background: linear-gradient(90deg, #0b6b4a, #3cb371);
+    border-radius: 6px;
 }
+
 .progress-fill {
     position: absolute;
     left: 0;
