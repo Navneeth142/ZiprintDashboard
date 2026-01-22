@@ -3,57 +3,89 @@
 @implements IDisposable
 
 <div class="chart-card">
+
     <h4>Shift Part Count</h4>
-    <h3>@PartNo</h3>
-    <canvas id="@CanvasId" height="220"></canvas>
+
+    @if (!string.IsNullOrWhiteSpace(PartNo))
+    {
+        <h3>@PartNo</h3>
+    }
+
+    <div class="chart-wrapper">
+        <canvas id="@CanvasId"></canvas>
+    </div>
+
+    <!-- 🔽 PILL + OPERATOR -->
+    <div class="chart-footer">
+
+        @if (IsStopped)
+        {
+            <!-- 🔶 YELLOW PILL -->
+            <div class="station-pill stopped">
+                <span>@StoppedShift</span>
+            </div>
+
+            <div class="operator-text">
+                Operator @StoppedShift.Replace("S-", "")
+            </div>
+
+            <div class="station-note">
+                @StopMessage
+            </div>
+        }
+        else
+        {
+            @foreach (var label in Labels)
+            {
+                <div class="station-block">
+                    <div class="station-pill active">
+                        <span>@label</span>
+                    </div>
+
+                    <div class="operator-text">
+                        Operator @label.Replace("S-", "")
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+
 </div>
 
 @code {
-    [Parameter] public string PartNo { get; set; } = "";
+    [Parameter] public string? PartNo { get; set; }
     [Parameter] public string CanvasId { get; set; } = "";
     [Parameter] public string[] Labels { get; set; } = [];
     [Parameter] public int[] Values { get; set; } = [];
 
-    private bool chartReady = false;
-    private bool disposed = false;
+    private bool chartReady;
+    private bool disposed;
+
+    private bool IsStopped =>
+        Values.Length > 0 && Values.All(v => v == 0);
+
+    private string StoppedShift =>
+        Labels.Length > 0 ? Labels.Last() : "S-08";
+
+    private string StopMessage =>
+        $"Station {StoppedShift.Replace("S-", "")} is not in production";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !string.IsNullOrEmpty(CanvasId))
         {
-            try
-            {
-                // 🔥 Test if JS is ready
-                await JS.InvokeVoidAsync("eval", "if(typeof andonCharts === 'undefined') throw 'JS not loaded'");
-
-                await JS.InvokeVoidAsync("andonCharts.create", CanvasId, Labels, Values);
-                chartReady = true;
-            }
-            catch (JSException ex)
-            {
-                Console.WriteLine($"Chart init failed: {ex.Message}");
-                // Retry after 500ms
-                await Task.Delay(500);
-                await JS.InvokeVoidAsync("andonCharts.create", CanvasId, Labels, Values);
-                chartReady = true;
-            }
+            await JS.InvokeVoidAsync("andonCharts.create", CanvasId, Labels, Values);
+            chartReady = true;
         }
     }
 
-    public async Task Update(int[] values)
+    protected override async Task OnParametersSetAsync()
     {
         if (!chartReady || disposed || string.IsNullOrEmpty(CanvasId))
             return;
 
-        try
-        {
-            await JS.InvokeVoidAsync("andonCharts.update", CanvasId, values);
-        }
-        catch (JSException)
-        {
-            // Silent fail - chart might recreate
-            chartReady = false;
-        }
+        await JS.InvokeVoidAsync("andonCharts.update", CanvasId, Values);
     }
 
     public void Dispose() => disposed = true;

@@ -4,7 +4,7 @@
 @inject AndonRealtimeService Service
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<PageTitle><center>Andon Dashboard</center></PageTitle>
+<PageTitle>Andon Dashboard</PageTitle>
 
 <!-- TOP GREEN HEADER -->
 <AndonHeader Date="state.DateTime" />
@@ -16,41 +16,39 @@
     <div class="andon-container">
 
         <!-- LEFT : PART STATUS TABLE -->
-        <PartStatusTable Parts="state.Parts" />
+        <PartStatusTable
+            Parts="state.Parts"
+            SelectedParts="selectedParts"
+            OnPartToggled="OnPartToggled" />
 
-        <!-- RIGHT : STACKED BAR CHARTS -->
+        <!-- RIGHT : ALWAYS 3 BAR CHARTS -->
         <div class="charts">
-            <ShiftChartJs @ref="bChart"
-                          PartNo="B1223450"
-                          CanvasId="chart-b"
-                          Labels="@bLabels"
-                          Values="@BValues" />
 
-            <ShiftChartJs @ref="cChart"
-                          PartNo="C1223450"
-                          CanvasId="chart-c"
-                          Labels="@cLabels"
-                          Values="@CValues" />
+            @for (int i = 0; i < 3; i++)
+            {
+                string? partNo = i < selectedParts.Count
+                ? selectedParts[i]
+                : null;
 
-            <ShiftChartJs @ref="dChart"
-                          PartNo="D1223450"
-                          CanvasId="chart-d"
-                          Labels="@dLabels"
-                          Values="@DValues" />
+                <ShiftChartJs @key="i"
+                              PartNo="@partNo"
+                              CanvasId="@($"chart-{i}")"
+                              Labels="@GetShiftLabels(partNo)"
+                              Values="@GetShiftValues(partNo)" />
+            }
+
         </div>
 
-        <!-- KPI ROW (BELOW GRID, CENTERED) -->
+        <!-- KPI ROW -->
         <div class="kpi-container">
             <KpiFooter />
         </div>
 
-        <!-- FOOTER LOGOS (BOTTOM, OUTSIDE GRID) -->
+        <!-- FOOTER LOGOS -->
         <div class="dashboard-footer">
             <img src="/images/Amit_image.png" class="logo-amit" />
             <img src="/images/AceMicromatic_image.png" class="logo-ace" />
         </div>
-
-
 
     </div>
 </div>
@@ -59,26 +57,56 @@
 
     private BlazorAssignment.Models.AndonState state = new();
 
-    private ShiftChartJs? bChart;
-    private ShiftChartJs? cChart;
-    private ShiftChartJs? dChart;
-
-    private readonly string[] bLabels = { "S-05", "S-06" };
-    private readonly string[] cLabels = { "S-07" };
-    private readonly string[] dLabels = { "S-08" };
-
-    private int[] BValues =>
-        state.ShiftCounts.TryGetValue("B1223450", out var v) ? v : Array.Empty<int>();
-
-    private int[] CValues =>
-        state.ShiftCounts.TryGetValue("C1223450", out var v) ? v : Array.Empty<int>();
-
-    private int[] DValues =>
-        state.ShiftCounts.TryGetValue("D1223450", out var v) ? v : Array.Empty<int>();
+    // ✅ DEFAULT 3 SELECTED PARTS
+    private List<string> selectedParts = new()
+    {
+        "B1223450",
+        "C1223450",
+        "D1223450"
+    };
 
     protected override void OnInitialized()
     {
-        // ONE-TIME LOAD (NO TIMER, NO AUTO REFRESH)
         state = Service.GetState();
+    }
+
+    // ✅ TOGGLE PART SELECTION (MAX 3)
+    private void OnPartToggled(string partNo)
+    {
+        if (selectedParts.Contains(partNo))
+        {
+            selectedParts.Remove(partNo);
+        }
+        else if (selectedParts.Count < 3)
+        {
+            selectedParts.Add(partNo);
+        }
+    }
+
+    // ✅ SAFE SHIFT LABELS (NEVER EMPTY)
+    private string[] GetShiftLabels(string? partNo)
+    {
+        if (string.IsNullOrWhiteSpace(partNo))
+            return new[] { "S-01", "S-02" };
+
+        if (state.ShiftCounts.TryGetValue(partNo, out var values))
+        {
+            return Enumerable.Range(1, values.Length)
+                             .Select(i => $"S-{i + 4}")
+                             .ToArray();
+        }
+
+        return new[] { "S-01", "S-02" };
+    }
+
+    // ✅ SAFE SHIFT VALUES (ZERO WHEN NO DATA)
+    private int[] GetShiftValues(string? partNo)
+    {
+        if (string.IsNullOrWhiteSpace(partNo))
+            return new[] { 0, 0 };
+
+        return state.ShiftCounts.TryGetValue(partNo, out var values)
+            ? values
+            : new[] { 0, 0 };
     }
 }

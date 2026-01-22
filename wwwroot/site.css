@@ -252,6 +252,7 @@
 
 /* PROGRESS */
 .progress-bar {
+    position: relative;
     height: 6px;
     background: #cfe8dd;
     border-radius: 6px;
@@ -265,12 +266,20 @@
 }
 
 .part-row.active .progress-bar {
-    background: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.55);
 }
 
 .part-row.active .progress-fill {
-    background: linear-gradient(90deg, #0b6b4a, #3cb371);
+    background: rgba(255,255,255,0.95);
+    z-index: 1;
 }
+.progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+
 
 /* KPI */
 .kpi-footer {
@@ -415,3 +424,158 @@
     background: transparent; /* 🔥 force blend */
     box-shadow: none; /* 🔥 no card effect */
 }
+/* ===== ANDON HEADER META (Date / Time / Plant / Shift) ===== */
+
+.meta {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: white;
+}
+
+    .meta-item label {
+        font-size: 12px;
+        opacity: 0.8;
+        letter-spacing: 0.4px;
+    }
+
+/* 🔥 Make bar chart cards taller */
+.charts > .chart-card {
+    min-height: 420px;
+}
+
+/* 🔥 Make bars themselves taller */
+.charts canvas {
+    height: 300px !important;
+}
+
+    .meta-item span {
+        font-size: 22px; /* 🔥 makes it bold like image 2 */
+        font-weight: 600;
+        line-height: 1.1;
+    }
+
+.meta-separator {
+    width: 1px;
+    height: 42px;
+    background: rgba(255,255,255,0.35);
+}
+.station-pill {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+    .station-pill span {
+        background: #ffe08a;
+        color: #7a5a00;
+        padding: 4px 12px;
+        border-radius: 14px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+.station-note {
+    text-align: center;
+    font-size: 12px;
+    color: #2f8f6b;
+    margin-top: 4px;
+}
+/* ============================= */
+/* FORCE TALL BAR GRAPHS (SAFE) */
+/* ============================= */
+
+.charts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+}
+
+/* Make each chart card tall */
+.chart-card {
+    height: 460px;           /* 🔥 THIS is the key */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Allow canvas to grow */
+.chart-card canvas {
+    flex: 1;                 /* 🔥 fills remaining height */
+    max-height: 360px;
+}
+
+/* ===== CHART FOOTER (PILLS + OPERATOR) ===== */
+
+.chart-wrapper {
+    height: 320px; /* 🔥 makes bars taller */
+}
+
+.chart-footer {
+    margin-top: 12px;
+    text-align: center;
+}
+
+/* group per station */
+.station-block {
+    margin-bottom: 8px;
+}
+
+/* COMMON PILL */
+.station-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+    /* GREEN ACTIVE */
+    .station-pill.active {
+        background: #dff3ea;
+        color: #0b6b4a;
+    }
+
+        .station-pill.active::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: #2ecc71;
+            border-radius: 50%;
+        }
+
+    /* YELLOW STOPPED */
+    .station-pill.stopped {
+        background: #f5e6a2;
+        color: #8a6d00;
+    }
+
+        .station-pill.stopped::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: #f1c40f;
+            border-radius: 50%;
+        }
+
+.operator-text {
+    font-size: 14px;
+    color: #0b6b4a;
+    margin-top: 4px;
+}
+
+.station-note {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #0b6b4a;
+}
+
+

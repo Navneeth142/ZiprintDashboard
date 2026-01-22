@@ -2,47 +2,40 @@
 
 <div class="part-status-card">
 
-    <!-- Header -->
     <div class="part-status-header">
         <div>Part Number</div>
         <div>Count / Target</div>
         <div>% Completion</div>
     </div>
 
-    <!-- Rows -->
-    @foreach (var p in Parts
-        .Select(p => new
-        {
-            Part = p,
-            Percent = Math.Min(100, Math.Round((double)p.Count / p.Target * 100, 1))
-        })
-        .OrderByDescending(x => x.Percent)
-        .Select((x, index) => new { x.Part, x.Percent, Index = index }))
+    @foreach (var p in Parts)
     {
-        bool isTop = p.Index < 3;
+        bool isSelected = SelectedParts.Contains(p.PartNo);
 
-        <div class="part-row @(isTop ? "active" : "")">
-            <div class="part-no">@p.Part.PartNo</div>
+        <div class="part-row @(isSelected ? "active" : "")"
+             @onclick="() => OnPartToggled.InvokeAsync(p.PartNo)">
 
-            <div class="count">
-                @p.Part.Count/@p.Part.Target
-            </div>
+            <div class="part-no">@p.PartNo</div>
+
+            <div class="count">@p.Count/@p.Target</div>
 
             <div class="progress-cell">
-                <span class="percent">@p.Percent%</span>
+                <span class="percent">
+                    @Math.Round((double)p.Count / p.Target * 100, 1)%
+                </span>
 
                 <div class="progress-bar">
                     <div class="progress-fill"
-                         style="width:@p.Percent%">
+                         style="width:@Math.Round((double)p.Count / p.Target * 100,1)%">
                     </div>
                 </div>
             </div>
         </div>
     }
-
 </div>
 
 @code {
-    [Parameter]
-    public List<PartStatus> Parts { get; set; } = [];
+    [Parameter] public List<PartStatus> Parts { get; set; } = [];
+    [Parameter] public List<string> SelectedParts { get; set; } = [];
+    [Parameter] public EventCallback<string> OnPartToggled { get; set; }
 }
